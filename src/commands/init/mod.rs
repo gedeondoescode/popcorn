@@ -37,7 +37,7 @@ fn create_config(is_packed: bool) -> () {
     }
 }
 
-pub async fn handle(options: Options) -> Result<()> {
+pub async fn handle(options: Options) -> Result<(), i32> {
     if !Path::new(".kernelrc").exists() {
         create_config(options.packed)
     } else if options.force {

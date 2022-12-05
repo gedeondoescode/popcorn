@@ -268,7 +268,7 @@ fn install_prod(PATH: String, butter_file: PathBuf) -> Result<(), String> {
     }
 }
 
-pub async fn handle(options: Options) -> Result<()> {
+pub async fn handle(options: Options) -> Result<(), i32> {
     let CONFIG: Config;
 
     match get_config() {

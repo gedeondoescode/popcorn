@@ -376,7 +376,7 @@ pub fn build_thread(
     }
 }
 
-pub async fn handle(options: Options) -> Result<()> {
+pub async fn handle(options: Options) -> Result<(), i32> {
     let CONFIG: Config;
 
     match get_config() {

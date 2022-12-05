@@ -32,7 +32,7 @@ pub enum Commands {
     Theatre(theatre::Options),
 }
 
-pub async fn handle_command(command: Commands) -> Result<()> {
+pub async fn handle_command(command: Commands) -> Result<(), i32> {
     match command {
         Commands::Issue(options) => issue::handle(options).await,
         Commands::Init(options) => init::handle(options).await,

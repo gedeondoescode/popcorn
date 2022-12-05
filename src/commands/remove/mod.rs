@@ -215,7 +215,7 @@ fn remove_prod(kernel_name: String, PATH: String) -> Result<String, String> {
     }
 }
 
-pub async fn handle(options: Options) -> Result<()> {
+pub async fn handle(options: Options) -> Result<(), i32> {
     let kernel_name = match options.kernel_name {
         Some(name) => name,
         None => {

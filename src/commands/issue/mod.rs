@@ -7,7 +7,7 @@ use webbrowser;
 #[clap(about = "Report an issue.")]
 pub struct Options {}
 
-pub async fn handle(_options: Options) -> Result<()> {
+pub async fn handle(_options: Options) -> Result<(), i32> {
     let _ = webbrowser::open("https://github.com/punctuations/popcorn/issues/new");
 
     Ok(())

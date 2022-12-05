@@ -153,8 +153,7 @@ fn download_kernel(url: String, file_name: String) -> Result<String, String> {
         };
 
         // untaring will save it to incorrect dir, need to move contents of dir outside of it.
-        let files =
-            read_dir(format!("{}{sep}{}-download", TMP(), file_name, sep = SEP)).unwrap();
+        let files = read_dir(format!("{}{sep}{}-download", TMP(), file_name, sep = SEP)).unwrap();
 
         // ensure the final dir is empty/non-existant so no errors are thrown during rename
         remove_dir_all(format!("{}{sep}{}", TMP(), file_name, sep = SEP));
@@ -242,7 +241,7 @@ fn download_yum(pkg: &str) -> Result<(), String> {
     Ok(())
 }
 
-pub async fn handle(options: Options) -> Result<()> {
+pub async fn handle(options: Options) -> Result<(), i32> {
     // get kernel link from passed in args
     let kernel_link = match options.kernel_link {
         Some(link) => link,

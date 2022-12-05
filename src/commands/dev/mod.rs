@@ -200,7 +200,7 @@ fn event_handler(event: DebouncedEvent, config: Config) -> () {
     thread::spawn(|| thread_compile(config)).join();
 }
 
-pub async fn handle(options: Options) -> Result<()> {
+pub async fn handle(options: Options) -> Result<(), i32> {
     let PATH: String = match env::var("PATH") {
         Ok(path) => path,
         Err(_) => "".to_string(),
