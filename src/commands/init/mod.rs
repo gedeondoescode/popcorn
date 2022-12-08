@@ -21,30 +21,46 @@ pub struct Options {
     packed: bool,
 }
 
-fn create_config(is_packed: bool) -> () {
-    let current = env::current_dir().unwrap();
+fn create_config(is_packed: bool) -> Result<(), (i32, &'static str) {
+    let current: () = match env::current_dir() {
+        Ok(..) => (),
+        Err(..) => return Err((2, "Unable to locate current directory."))
+    };
     let binding = current.to_string_lossy();
-    let cwd_name = binding.split(SEP).last().unwrap();
-    let mut file = File::create(".kernelrc").unwrap();
+    let cwd_name: () = match binding.split(SEP).last() {
+        Ok(..) => (),
+        Err(..) => return Err((2, ""))
+    };
+    let mut file = File::create(".kernelrc") {
+        Ok(..) => (),
+        Err(..) => return Err((2, "Unable to locate current working directory."))
+    };
 
     let packed_json = format!("{{\n\"kernel\": \"{}\",\n\"kernel_type\": \"packed\",\n\"dev_cmd\": \"popcorn dev\",\n\"seed_cmd\": \"go build -o @dest\",\n\"advanced\": {{\n\"dev_node\": \"-dev\"\n}}\n}}", cwd_name).into_bytes();
     let unpacked_json = format!("{{\n\t\"kernel_name\": \"{}\",\n\t\"kernel_type\": \"unpacked\",\n\t\"unpacked_husk\": \"python @local/popcorn.py @args\",\n\t\"dev_cmd\": \"popcorn dev\",\n\t\"seed_cmd\": \"cp -r * @dest\",\n\t\"advanced\": {{\n\t\t\"dev_node\":  \"-dev\"\n\t}}\n}}", cwd_name).into_bytes();
 
     if is_packed {
-        file.write_all(&*packed_json).unwrap();
+        file.write_all(&*packed_json) {
+            Ok(..) => (),
+            Err(..) => return Err((2, ""))
+        };
     } else {
-        file.write_all(&*unpacked_json).unwrap();
+        file.write_all(&*unpacked_json) {
+            Ok(..) => (),
+            Err(..) => return Err((2, ""))
+        };
     }
 }
 
 pub async fn handle(options: Options) -> Result<(), i32> {
-    if !Path::new(".kernelrc").exists() {
+    if match !Path::new(".kernelrc").exists() {
         create_config(options.packed)
     } else if options.force {
         create_config(options.packed)
     } else {
         Print::info(".kernelrc already exists; no changes made.")
+    } {
+        Ok(_) => return Ok(()),
+        Err(_) => return Err(2)
     };
-
-    Ok(())
 }
