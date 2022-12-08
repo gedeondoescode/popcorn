@@ -415,7 +415,8 @@ pub async fn handle(options: Options) -> Result<(), i32> {
         output = output + &SEP.to_string();
     }
 
-    thread::spawn(|| build_thread(output, CONFIG, false, String::new())).join();
-
-    Ok(())
+    return match thread::spawn(|| build_thread(output, CONFIG, false, String::new())).join() {
+        Ok(_) => Ok(()),
+        Err(_) => Err(2),
+    };
 }
